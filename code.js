@@ -1,52 +1,6 @@
 //code.j
-//https://www.w3schools.com/js/js_graphics_chartjs.asp
 
 const fs = require('fs');
-const { Chart } = require('chart.js');
-const { CanvasRenderService } = require('chartjs-node-canvas');
-
-const generateCanvas = () => new CanvasRenderService(800, 600);
-
-async function createChart(xValues, yValues, title, xLabel, yLabel, filename) {
-    const canvasRenderService = generateCanvas();
-
-    const configuration = {
-        type: 'line',
-        data: {
-            labels: xValues.map(String),
-            datasets: [{
-                label: title,
-                data: yValues,
-                fill: false,
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1,
-            }],
-        },
-        options: {
-            scales: {
-                x: {
-                    type: 'linear',
-                    position: 'bottom',
-                    title: {
-                        display: true,
-                        text: xLabel,
-                    },
-                },
-                y: {
-                    type: 'linear',
-                    position: 'left',
-                    title: {
-                        display: true,
-                        text: yLabel,
-                    },
-                },
-            },
-        },
-    };
-
-    const image = await canvasRenderService.renderToBuffer(configuration);
-    fs.writeFileSync(filename, image);
-}
 
 function generateRandomDistanceMatrix(size) {
     const matrix = [];
@@ -220,16 +174,4 @@ for (const size of inputSizes) {
 console.log("Held-Karp Results:", heldKarpResults);
 console.log("Local Search Results:", localSearchResults);
 
-// Extract data for plotting
-const heldKarpTourLengths = heldKarpResults.map(result => result.minTourLength);
-const heldKarpExecutionTimes = heldKarpResults.map(result => result.executionTime);
 
-const localSearchTourLengths = localSearchResults.map(result => result.routeDist);
-const localSearchExecutionTimes = localSearchResults.map(result => result.executionTime);
-
-// Create and save plots
-createChart(inputSizes, heldKarpTourLengths, 'Held-Karp Tour Length', 'Input Size', 'Tour Length', 'held_karp_tour_length.png');
-createChart(inputSizes, heldKarpExecutionTimes, 'Held-Karp Execution Time', 'Input Size', 'Execution Time', 'held_karp_execution_time.png');
-
-createChart(inputSizes, localSearchTourLengths, 'Local Search Tour Length', 'Input Size', 'Tour Length', 'local_search_tour_length.png');
-createChart(inputSizes, localSearchExecutionTimes, 'Local Search Execution Time', 'Input Size', 'Execution Time', 'local_search_execution_time.png');
